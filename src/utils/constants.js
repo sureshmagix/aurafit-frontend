@@ -1,6 +1,7 @@
 export const NAV_LINKS = [
   { label: 'Home', path: '/' },
   { label: 'Shop', path: '/shop' },
+  { label: 'Aura Match', path: '/aura-match' },
   { label: 'Orders', path: '/orders' },
   { label: 'Profile', path: '/profile' },
 ]

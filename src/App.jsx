@@ -12,6 +12,7 @@ import OrdersPage from './pages/OrdersPage'
 import ProfilePage from './pages/ProfilePage'
 import AdminDashboardPage from './pages/AdminDashboardPage'
 import NotFoundPage from './pages/NotFoundPage'
+import AuraMatchPage from './pages/AuraMatchPage'
 
 function App() {
   return (
@@ -23,6 +24,15 @@ function App() {
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<RegisterPage />} />
         <Route path="/cart" element={<CartPage />} />
+
+        <Route
+          path="/aura-match"
+          element={
+            <ProtectedRoute>
+              <AuraMatchPage />
+            </ProtectedRoute>
+          }
+        />
 
         <Route
           path="/checkout"

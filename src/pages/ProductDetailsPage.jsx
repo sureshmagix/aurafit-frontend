@@ -24,7 +24,8 @@ function ProductDetailsPage() {
         const resolved = data.product || data.data || data
         if (active) {
           setProduct(resolved)
-          setSelectedSize(resolved.sizes?.[0] || '')
+          const firstSize = resolved.sizes?.[0]
+          setSelectedSize(typeof firstSize === 'object' ? (firstSize?.size || '') : (firstSize || ''))
         }
       } catch {
         const fallback = featuredProducts.find((item) => item._id === id) || featuredProducts[0]
@@ -48,6 +49,17 @@ function ProductDetailsPage() {
 
   const sellingPrice = calculateDiscountedPrice(product.price, product.discountPercentage)
 
+  // Safely extract category name (can be string or populated object)
+  const categoryName = product.category?.name || (typeof product.category === 'string' ? product.category : 'Fashion')
+
+  // Safely extract sizes (can be ['S','M'] or [{size:'S', stock:10}])
+  const sizeList = (product.sizes || []).map(s => typeof s === 'object' ? s.size : s).filter(Boolean)
+
+  // Safely extract stock
+  const totalStock = Array.isArray(product.sizes) && product.sizes[0]?.stock !== undefined
+    ? product.sizes.reduce((acc, s) => acc + (s.stock || 0), 0)
+    : (product.stock || 0)
+
   return (
     <section className="section">
       <div className="container" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '2rem' }}>
@@ -55,7 +67,7 @@ function ProductDetailsPage() {
           <img src={product.images?.[0]} alt={product.name} style={{ width: '100%', height: 620, objectFit: 'cover' }} />
         </div>
         <div>
-          <span className="badge">{product.category || 'Fashion'}</span>
+          <span className="badge">{categoryName}</span>
           <h1 className="section-title" style={{ marginTop: '1rem' }}>{product.name}</h1>
           <p className="section-subtitle">{product.description || product.shortDescription}</p>
           <div style={{ display: 'flex', alignItems: 'center', gap: '0.8rem', marginBottom: '1.4rem' }}>
@@ -65,7 +77,7 @@ function ProductDetailsPage() {
           <div style={{ marginBottom: '1rem' }}>
             <p style={{ fontWeight: 700 }}>Select size</p>
             <div style={{ display: 'flex', gap: '0.8rem', flexWrap: 'wrap' }}>
-              {(product.sizes || ['S', 'M', 'L']).map((size) => (
+              {(sizeList.length ? sizeList : ['S', 'M', 'L']).map((size) => (
                 <button
                   key={size}
                   className={`btn ${selectedSize === size ? 'btn-primary' : 'btn-secondary'}`}
@@ -86,7 +98,7 @@ function ProductDetailsPage() {
           </div>
           <div className="card" style={{ padding: '1rem', marginTop: '1.5rem' }}>
             <p><strong>Brand:</strong> {product.brand || 'Aura Fit'}</p>
-            <p><strong>Stock:</strong> {product.stock || 0} available</p>
+            <p><strong>Stock:</strong> {totalStock} available</p>
             <p><strong>Rating:</strong> {product.rating || 4.5} / 5</p>
           </div>
         </div>

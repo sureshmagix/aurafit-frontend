@@ -14,7 +14,7 @@ function ProductCard({ product }) {
         />
       </Link>
       <div style={{ padding: '1rem' }}>
-        <p className="helper-text" style={{ margin: '0 0 0.35rem' }}>{product.category || 'Fashion'}</p>
+        <p className="helper-text" style={{ margin: '0 0 0.35rem' }}>{product.category?.name || (typeof product.category === 'string' ? product.category : 'Fashion')}</p>
         <h3 style={{ margin: '0 0 0.45rem', fontSize: '1.05rem' }}>{product.name}</h3>
         <p className="helper-text" style={{ margin: '0 0 1rem' }}>{product.shortDescription || 'Premium Aura Fit apparel.'}</p>
         <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', flexWrap: 'wrap' }}>

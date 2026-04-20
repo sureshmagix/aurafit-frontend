@@ -40,7 +40,7 @@ export function AuthProvider({ children }) {
     setLoading(true)
     try {
       const { data } = await authService.register(payload)
-      const resolvedUser = data.user || data.data?.user || null
+      const resolvedUser = data.user || data.data?.user || data.data || null
       const resolvedToken = data.token || data.data?.token || null
       if (resolvedUser) setUser(resolvedUser)
       if (resolvedToken) setToken(resolvedToken)
